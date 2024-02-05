@@ -1,0 +1,28 @@
+version: "3"
+services:
+  backend:
+    image: "recipe-forge-backend"
+    build:
+      context: ./backend
+      dockerfile: ./src/docker/Dockerfile.backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+
+  database:
+    image: "recipe-forge-database"
+    build:
+      context: ./backend
+      dockerfile: ./src/docker/Dockerfile.database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "recipe_forge"
+      POSTGRES_USER: "heitzjulien"
+      POSTGRES_PASSWORD: "root"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
