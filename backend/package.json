@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "typescript": "^5.3.3"
+  }
+}
