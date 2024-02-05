@@ -32,3 +32,14 @@ export function createRecipe(title: string) {
     [title]
   );
 }
+
+export async function updateRecipe(title: string, id: number) {
+  return client.query<Recipe>(
+    "UPDATE recipe SET title = $1 WHERE id = $2 RETURNING *",
+    [title, id]
+  );
+}
+
+export async function deleteRecipe(id: number) {
+  return client.query<Recipe>("DELETE FROM recipe WHERE id = $1", [id]);
+}
