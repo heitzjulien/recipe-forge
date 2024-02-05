@@ -25,3 +25,10 @@ export async function getRecipeById(id: number) {
   ]);
   return res.rows[0];
 }
+
+export function createRecipe(title: string) {
+  return client.query<Recipe>(
+    "INSERT INTO recipe (name) VALUES ($1) RETURNING *",
+    [title]
+  );
+}
