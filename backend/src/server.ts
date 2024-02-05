@@ -1,10 +1,9 @@
 import express, { Application } from "express";
-import dotenv from "dotenv";
 import cors from "cors";
-import { getRecipes } from "./models/recipeModel";
 import recipeRoute from "./routes/recipeRoute";
+import { envConfig } from "./config/envConfig";
 
-dotenv.config();
+envConfig();
 
 const app: Application = express();
 const port = process.env.PORT;

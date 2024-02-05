@@ -28,7 +28,7 @@ export async function getRecipeById(id: number) {
 
 export function createRecipe(title: string) {
   return client.query<Recipe>(
-    "INSERT INTO recipe (name) VALUES ($1) RETURNING *",
+    "INSERT INTO recipe (title) VALUES ($1) RETURNING *",
     [title]
   );
 }
