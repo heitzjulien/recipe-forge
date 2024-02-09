@@ -1,6 +1,6 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
+  "name": "api-recipe-forge",
+  "version": "1.0.3",
   "main": "src/server.ts",
   "license": "MIT",
   "scripts": {

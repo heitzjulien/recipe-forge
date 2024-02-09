@@ -2,9 +2,11 @@ FROM node:21.6.0-alpine3.19
 
 WORKDIR /app
 
-COPY . .
+COPY yarn.lock package.json ./
 
 RUN yarn install
+
+COPY . .
 
 EXPOSE 3000
 
