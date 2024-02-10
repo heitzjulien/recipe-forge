@@ -3,10 +3,11 @@ import "./CardRecipe.scss";
 interface CardRecipeProps {
   id: number;
   title: string;
+  image_url: string;
   created_at: string;
 }
 
-const CardRecipe = ({ id, title, created_at }: CardRecipeProps) => {
+const CardRecipe = ({ id, title, image_url, created_at }: CardRecipeProps) => {
   const created_at_date = new Date(created_at).toLocaleDateString("FR-fr", {
     weekday: "long",
     year: "numeric",
@@ -18,7 +19,7 @@ const CardRecipe = ({ id, title, created_at }: CardRecipeProps) => {
     <li className="cards_item">
       <div className="card">
         <div className="card_image">
-          <img src="https://picsum.photos/500/300/?image=10" />
+          <img src={image_url} alt={title} />
         </div>
         <div className="card_content">
           <h2 className="card_title">{title}</h2>

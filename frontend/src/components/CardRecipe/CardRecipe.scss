@@ -14,9 +14,14 @@
 }
 
 .card_image img {
-  height: auto;
-  max-width: 100%;
-  vertical-align: middle;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.card_image {
+  max-width: 500px;
+  max-height: 300px;
 }
 
 .card_content {

@@ -5,6 +5,7 @@ import "./CardRecipeGrid.scss";
 interface Recipe {
   id: number;
   title: string;
+  image_url: string;
   created_at: string;
 }
 
@@ -23,6 +24,7 @@ const CardRecipeGrid = () => {
         <CardRecipe
           id={recipe.id}
           title={recipe.title}
+          image_url={recipe.image_url}
           created_at={recipe.created_at}
         />
       ))}
