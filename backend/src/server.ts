@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import cors from "cors";
 import recipeRoute from "./routes/recipeRoute";
 import instructionRoute from "./routes/instructionRoute";
+import ingredientRoute from "./routes/ingredientRoute";
 import { envConfig } from "./config/envConfig";
 import route from "./routes/route";
 
@@ -18,8 +19,8 @@ app.use(route);
 
 // Routes for recipes
 app.use(recipeRoute);
-
 app.use(instructionRoute);
+app.use(ingredientRoute);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found" });

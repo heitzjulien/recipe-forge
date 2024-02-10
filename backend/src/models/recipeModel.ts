@@ -1,45 +1,38 @@
-import { client } from "../config/dbConfig";
+import { db } from "../config/database/database";
+import {
+  NewRecipe,
+  Recipe,
+  RecipeUpdate,
+} from "../config/database/database.types";
 
-export type Recipe = {
-  id: number;
-  title: string;
-  created_at: Date;
-  updated_at: Date;
-};
-
-export type RecipeWithIngredient = {
-  recipe_id: number;
-  ingredient_id: number;
-  quantity: number;
-  unit: string;
-};
-
-export async function getRecipes() {
-  const res = await client.query<Recipe>("SELECT * FROM recipe");
-  return res.rows;
+export async function createRecipe(recipe: NewRecipe) {
+  return await db
+    .insertInto("recipe")
+    .values(recipe)
+    .returningAll()
+    .executeTakeFirstOrThrow();
 }
 
-export async function getRecipeById(id: number) {
-  const res = await client.query<Recipe>("SELECT * FROM recipe WHERE id = $1", [
-    id,
-  ]);
-  return res.rows[0];
+export async function findRecipeById(id: number) {
+  return await db
+    .selectFrom("recipe")
+    .where("id", "=", id)
+    .selectAll()
+    .executeTakeFirst();
 }
 
-export function createRecipe(title: string) {
-  return client.query<Recipe>(
-    "INSERT INTO recipe (title) VALUES ($1) RETURNING *",
-    [title]
-  );
+export async function findRecipe() {
+  return await db.selectFrom("recipe").selectAll().execute();
 }
 
-export async function updateRecipe(title: string, id: number) {
-  return client.query<Recipe>(
-    "UPDATE recipe SET title = $1 WHERE id = $2 RETURNING *",
-    [title, id]
-  );
+export async function updateRecipe(id: number, updateWith: RecipeUpdate) {
+  await db.updateTable("recipe").set(updateWith).where("id", "=", id).execute();
 }
 
 export async function deleteRecipe(id: number) {
-  return client.query<Recipe>("DELETE FROM recipe WHERE id = $1", [id]);
+  return await db
+    .deleteFrom("recipe")
+    .where("id", "=", id)
+    .returningAll()
+    .executeTakeFirst();
 }

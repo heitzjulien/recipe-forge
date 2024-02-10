@@ -1,17 +1,17 @@
 import express from "express";
 import {
-  getRecipesController,
-  getRecipeByIdController,
-  createRecipeController,
+  findRecipeByIdController,
+  findRecipeController,
   updateRecipeController,
+  createRecipeController,
   deleteRecipeController,
 } from "../controllers/recipeController";
 
 const router = express.Router();
 
-router.get("/api/recipes", getRecipesController);
+router.get("/api/recipes", findRecipeController);
 
-router.get("/api/recipes/:id", getRecipeByIdController);
+router.get("/api/recipes/:id", findRecipeByIdController);
 
 router.post("/api/recipes", createRecipeController);
 

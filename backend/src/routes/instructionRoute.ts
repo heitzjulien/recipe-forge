@@ -1,25 +1,19 @@
 import express from "express";
 import {
-  getInstructionsController,
-  getInstructionByIdController,
-  getInstructionByRecipeId,
   createInstructionController,
+  findInstructionByRecipeIdController,
   updateInstructionController,
   deleteInstructionController,
 } from "../controllers/instructionController";
 
 const router = express.Router();
 
-router.get("/api/instructions", getInstructionsController);
+router.get("/api/instructions/:recipe_id", findInstructionByRecipeIdController);
 
-router.get("/api/instructions/:id", getInstructionByIdController);
+router.post("/api/create/instruction", createInstructionController);
 
-router.get("/api/instructions/recipe/:recipe_id", getInstructionByRecipeId);
+router.put("/api/update/instruction/:id", updateInstructionController);
 
-router.post("/api/instructions", createInstructionController);
-
-router.put("/api/instructions/:id", updateInstructionController);
-
-router.delete("/api/instructions/:id", deleteInstructionController);
+router.delete("/api/delete/instruction/:id", deleteInstructionController);
 
 export default router;
