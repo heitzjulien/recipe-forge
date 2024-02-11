@@ -19,8 +19,8 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_DB: "recipe_forge"
-      POSTGRES_USER: "heitzjulien"
-      POSTGRES_PASSWORD: "root"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
     volumes:
       - db_data:/var/lib/postgresql/data
 

@@ -1,70 +1,131 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
-  getRecipes,
-  getRecipeById,
-  createRecipe,
+  findRecipeById,
+  findRecipe,
   updateRecipe,
+  createRecipe,
   deleteRecipe,
 } from "../models/recipeModel";
+import { createIngredient } from "../models/ingredientModel";
+import { createInstruction } from "../models/instructionModel";
+import {
+  NewIngredient,
+  NewInstruction,
+} from "../config/database/database.types";
+import { findIngredientById } from "../models/ingredientModel";
+import { findInstructionByRecipeId } from "../models/instructionModel";
 
-export const getRecipesController = async (req: Request, res: Response) => {
+export async function createRecipeController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    const recipes = await getRecipes();
-    res.json(recipes);
+    const { title, image_url, ingredients, instructions } = req.body;
+    const newRecipe = await createRecipe({
+      title: title,
+      image_url: image_url,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+
+    const newIngredients = await Promise.all(
+      ingredients.map(async (ingredient: NewIngredient) => {
+        return await createIngredient({
+          ...ingredient,
+          recipe_id: newRecipe.id,
+        });
+      })
+    );
+
+    const newInstructions = await Promise.all(
+      instructions.map(async (instruction: NewInstruction) => {
+        return await createInstruction({
+          ...instruction,
+          recipe_id: newRecipe.id,
+        });
+      })
+    );
+    res.json({
+      recipe: newRecipe,
+      ingredients: newIngredients,
+      instructions: newInstructions,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
+  }
+}
+
+export const findRecipeByIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = Number(req.params.id);
+    const recipe = await findRecipeById(Number(id));
+    const ingredients = await findIngredientById({ recipe_id: Number(id) });
+    const instructions = await findInstructionByRecipeId(Number(id));
+    res.json({ recipe, ingredients, instructions });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const getRecipeByIdController = async (req: Request, res: Response) => {
+export async function findRecipeController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    const { id } = req.params;
-    const recipe = await getRecipeById(Number(id));
+    const recipe = await findRecipe();
     res.json(recipe);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
-};
+}
 
-export const createRecipeController = async (req: Request, res: Response) => {
+export async function updateRecipeController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    const { title } = req.body;
-    const newRecipe = await createRecipe(title);
-    res.json(newRecipe);
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
+    const { id, title, image_url } = req.body;
+    const id_params = Number(req.params.id);
 
-export const updateRecipeController = async (req: Request, res: Response) => {
-  try {
-    const { title } = req.body;
-    let id = parseInt(req.params.id, 10);
-    if (!title || !id) {
-      return res.status(400).json({ message: "Title and id are required" });
+    if (!id || !title || !image_url) {
+      return res.status(400).json({ message: "All fields are required" });
     }
-    if (typeof title !== "string" || typeof id !== "number") {
-      return res.status(400).json({ message: "Invalid input" });
+    if (id !== id_params) {
+      return res
+        .status(400)
+        .json({ message: "You cannot perform this action" });
     }
-    const updatedRecipe = await updateRecipe(title, id);
+
+    const updatedRecipe = await updateRecipe(id_params, {
+      id: id,
+      title: title,
+      image_url: image_url,
+      updated_at: new Date(),
+    });
+
     res.json(updatedRecipe);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
-};
+}
 
-export const deleteRecipeController = async (req: Request, res: Response) => {
+export async function deleteRecipeController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    const id = parseInt(req.params.id);
-    if (!id) {
-      return res.status(400).json({ message: "Id is required" });
-    }
-    if (typeof id !== "number") {
-      return res.status(400).json({ message: "Invalid input" });
-    }
-    const recipe = await deleteRecipe(Number(id));
-    res.json(recipe);
+    const id = Number(req.params.id);
+    const deletedRecipe = await deleteRecipe(id);
+    res.json(deletedRecipe);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
-};
+}

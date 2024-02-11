@@ -1,35 +1,47 @@
-import { client } from "../config/dbConfig";
+import { db } from "../config/database/database";
+import {
+  Ingredient,
+  IngredientUpdate,
+  NewIngredient,
+} from "../config/database/database.types.js";
 
-export type Ingredient = {
-  id: number;
-  name: string;
-};
-
-export async function getIngredients() {
-  return await client.query<Ingredient>("SELECT * FROM ingredient");
+export async function createIngredient(ingredient: NewIngredient) {
+  console.log(ingredient);
+  return await db
+    .insertInto("ingredient")
+    .values(ingredient)
+    .returningAll()
+    .executeTakeFirstOrThrow();
 }
 
-export async function getIngredientById(id: number) {
-  return await client.query<Ingredient>(
-    "SELECT * FROM ingredient WHERE id = $1",
-    [id]
-  );
+export async function findIngredientById(criteria: Partial<Ingredient>) {
+  let query = db.selectFrom("ingredient");
+
+  if (criteria.id) {
+    query = query.where("id", "=", criteria.id);
+  }
+  if (criteria.recipe_id) {
+    query = query.where("recipe_id", "=", criteria.recipe_id);
+  }
+
+  return await query.selectAll().execute();
 }
 
-export function createIngredient(name: string) {
-  return client.query<Ingredient>(
-    "INSERT INTO ingredient (name) VALUES ($1) RETURNING *",
-    [name]
-  );
-}
-
-export async function updateIngredient(name: string, id: number) {
-  return client.query<Ingredient>(
-    "UPDATE ingredient SET name = $1 WHERE id = $2 RETURNING *",
-    [name, id]
-  );
+export async function updateIngredient(
+  id: number,
+  updateWith: IngredientUpdate
+) {
+  await db
+    .updateTable("ingredient")
+    .set(updateWith)
+    .where("id", "=", id)
+    .execute();
 }
 
 export async function deleteIngredient(id: number) {
-  return client.query<Ingredient>("DELETE FROM ingredient WHERE id = $1", [id]);
+  return await db
+    .deleteFrom("ingredient")
+    .where("id", "=", id)
+    .returningAll()
+    .executeTakeFirst();
 }
