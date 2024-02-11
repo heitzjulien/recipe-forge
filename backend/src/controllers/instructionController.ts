@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   createInstruction,
   findInstructionByRecipeId,
@@ -6,7 +6,11 @@ import {
   deleteInstruction,
 } from "../models/instructionModel";
 
-export async function createInstructionController(req: Request, res: Response) {
+export async function createInstructionController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { recipe_id, step_number, description } = req.body;
     const newInstruction = await createInstruction({
@@ -16,24 +20,29 @@ export async function createInstructionController(req: Request, res: Response) {
     });
     res.json(newInstruction);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 }
 
 export async function findInstructionByRecipeIdController(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) {
   try {
     const recipe_id = Number(req.params.recipe_id);
     const instruction = await findInstructionByRecipeId(recipe_id);
     res.json(instruction);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error " });
+    next(error);
   }
 }
 
-export async function updateInstructionController(req: Request, res: Response) {
+export async function updateInstructionController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { id, recipe_id, step_number, description } = req.body;
     const id_params = Number(req.params.id);
@@ -55,16 +64,20 @@ export async function updateInstructionController(req: Request, res: Response) {
     });
     res.json(updatedInstruction);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 }
 
-export async function deleteInstructionController(req: Request, res: Response) {
+export async function deleteInstructionController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const id = Number(req.params.id);
     const deletedInstruction = await deleteInstruction(id);
     res.json(deletedInstruction);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error " });
+    next(error);
   }
 }

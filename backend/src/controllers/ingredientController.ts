@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   createIngredient,
   deleteIngredient,
@@ -6,7 +6,11 @@ import {
   updateIngredient,
 } from "../models/ingredientModel";
 
-export async function createIngredientController(req: Request, res: Response) {
+export async function createIngredientController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { recipe_id, name, quantity, unit } = req.body;
 
@@ -18,13 +22,14 @@ export async function createIngredientController(req: Request, res: Response) {
     });
     res.json(newIngredient);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 }
 
 export async function findIngredientByIdController(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) {
   try {
     const recipe_id = Number(req.query.recipe_id);
@@ -35,11 +40,15 @@ export async function findIngredientByIdController(
     });
     res.json(ingredient);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 }
 
-export async function updateIngredientController(req: Request, res: Response) {
+export async function updateIngredientController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { id, recipe_id, name, quantity, unit } = req.body;
     const id_params = Number(req.params.id);
@@ -60,16 +69,20 @@ export async function updateIngredientController(req: Request, res: Response) {
     });
     res.json(updatedIngredient);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 }
 
-export async function deleteIngredientController(req: Request, res: Response) {
+export async function deleteIngredientController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const id = Number(req.params.id);
     const deletedIngredient = await deleteIngredient(id);
     res.json(deletedIngredient);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error " });
+    next(error);
   }
 }
