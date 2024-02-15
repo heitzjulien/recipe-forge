@@ -1,11 +1,36 @@
 ---
 import Logo from "../../assets/logo-recipe-forge.svg";
-import "./Header.scss";
 ---
 
-<header class="header-g">
-  <a href="/" class="header-link">
-    <img src={Logo.src} alt="Logo Recipe Forge" class="header-img" />
+<header>
+  <a href="/">
+    <img src={Logo.src} alt="Logo Recipe Forge" />
     <h1>Recipe Forge</h1>
   </a>
 </header>
+<style lang="scss">
+  @import "../../styles/variables.scss";
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 2rem;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    img {
+      width: 100px;
+      height: 100px;
+    }
+    h1 {
+      margin: 0;
+      color: $primary-orange;
+    }
+  }
+</style>
