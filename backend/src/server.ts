@@ -1,11 +1,9 @@
-import express, { Application, NextFunction } from "express";
 import cors from "cors";
-import recipeRoute from "./routes/recipeRoute";
-import instructionRoute from "./routes/instructionRoute";
-import ingredientRoute from "./routes/ingredientRoute";
-import { envConfig } from "./config/envConfig";
+import express, { Application } from "express";
+import { envConfig } from "./config/env/env.config";
+import { errorHandler, notFoundHandler } from "./handlers/httpError.handler";
+import recipeRoute from "./routes/recipe.route";
 import route from "./routes/route";
-import { errorHandler, notFoundHandler } from "./handlers/httpErrorHandlers";
 
 envConfig();
 
@@ -20,8 +18,6 @@ app.use(route);
 
 // Routes for recipes
 app.use(recipeRoute);
-app.use(instructionRoute);
-app.use(ingredientRoute);
 
 // Http error handlers
 app.use(errorHandler);

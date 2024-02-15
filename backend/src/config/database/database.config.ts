@@ -1,7 +1,7 @@
-import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
+import { Pool } from "pg";
+import { envConfig } from "../env/env.config";
 import { Database } from "./database.types";
-import { envConfig } from "../envConfig";
 
 envConfig();
 
