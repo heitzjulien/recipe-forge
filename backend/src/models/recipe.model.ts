@@ -13,20 +13,16 @@ export async function findRecipes() {
   const recipes = await db.selectFrom("recipe").selectAll().execute();
 
   for (const recipe of recipes) {
-    const ingredients = await db
+    recipe.ingredients = await db
       .selectFrom("ingredient")
       .where("recipe_id", "=", recipe.id)
       .selectAll()
       .execute();
-    const instructions = await db
+    recipe.instructions = await db
       .selectFrom("instruction")
       .where("recipe_id", "=", recipe.id)
       .selectAll()
       .execute();
-
-    // TODO: Ajouter au type Recipe, Ingredients & Instructions
-    recipe.ingredients = ingredients;
-    recipe.instructions = instructions;
   }
 
   return recipes;
@@ -40,20 +36,17 @@ export async function findRecipeById(id: number) {
     .executeTakeFirst();
 
   if (recipe) {
-    const ingredients = await db
+    recipe.ingredients = await db
       .selectFrom("ingredient")
       .where("recipe_id", "=", recipe.id)
       .selectAll()
       .execute();
 
-    const instructions = await db
+    recipe.instructions = await db
       .selectFrom("instruction")
       .where("recipe_id", "=", recipe.id)
       .selectAll()
       .execute();
-
-    recipe.ingredients = ingredients;
-    recipe.instructions = instructions;
   }
 
   return recipe;
