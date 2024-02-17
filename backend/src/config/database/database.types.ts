@@ -19,6 +19,8 @@ export interface RecipeTable {
   image_url: string;
   created_at: Date;
   updated_at: Date;
+  ingredients?: Ingredient[];
+  instructions?: Instruction[];
 }
 
 export type Recipe = Selectable<RecipeTable>;

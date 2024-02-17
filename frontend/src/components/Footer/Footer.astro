@@ -1,7 +1,28 @@
 ---
-import "./Footer.scss";
+const year = new Date().getFullYear();
 ---
 
-<footer class="footer-g">
-  <p class="footer-p">© 2023 - Made in Alsace</p>
+<footer>
+  <p>
+    © {year} - <a href="https://www.youtube.com/watch?v=kLKEZBI3_gU"
+      >Made in France</a
+    >
+  </p>
 </footer>
+<style lang="scss">
+  @import "../../styles/variables.scss";
+  footer {
+    margin-top: auto;
+    background-color: #f5f5f5;
+    text-align: center;
+    color: $primary-black;
+
+    p {
+      font-size: 1.2rem;
+      a {
+        text-decoration: underline;
+        color: inherit;
+      }
+    }
+  }
+</style>

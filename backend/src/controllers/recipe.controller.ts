@@ -1,19 +1,25 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  findRecipeById,
-  findRecipe,
-  updateRecipe,
-  createRecipe,
-  deleteRecipe,
-} from "../models/recipeModel";
-import { createIngredient } from "../models/ingredientModel";
-import { createInstruction } from "../models/instructionModel";
-import {
   NewIngredient,
   NewInstruction,
 } from "../config/database/database.types";
-import { findIngredientById } from "../models/ingredientModel";
-import { findInstructionByRecipeId } from "../models/instructionModel";
+import {
+  createIngredient,
+  deleteIngredient,
+  updateIngredient,
+} from "../models/ingredient.model";
+import {
+  createInstruction,
+  deleteInstruction,
+  updateInstruction,
+} from "../models/instruction.model";
+import {
+  createRecipe,
+  deleteRecipe,
+  findRecipeById,
+  findRecipes,
+  updateRecipe,
+} from "../models/recipe.model";
 
 export async function createRecipeController(
   req: Request,
@@ -22,6 +28,7 @@ export async function createRecipeController(
 ) {
   try {
     const { title, image_url, ingredients, instructions } = req.body;
+
     const newRecipe = await createRecipe({
       title: title,
       image_url: image_url,
@@ -46,6 +53,7 @@ export async function createRecipeController(
         });
       })
     );
+
     res.json({
       recipe: newRecipe,
       ingredients: newIngredients,
@@ -56,29 +64,28 @@ export async function createRecipeController(
   }
 }
 
-export const findRecipeByIdController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const id = Number(req.params.id);
-    const recipe = await findRecipeById(Number(id));
-    const ingredients = await findIngredientById({ recipe_id: Number(id) });
-    const instructions = await findInstructionByRecipeId(Number(id));
-    res.json({ recipe, ingredients, instructions });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export async function findRecipeController(
+export async function findRecipesController(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const recipe = await findRecipe();
+    const recipes = await findRecipes();
+    res.json(recipes);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function findRecipeByIdController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const params_id = Number(req.params.id);
+    const recipe = await findRecipeById(params_id);
+
     res.json(recipe);
   } catch (error) {
     next(error);
@@ -91,26 +98,45 @@ export async function updateRecipeController(
   next: NextFunction
 ) {
   try {
-    const { id, title, image_url } = req.body;
-    const id_params = Number(req.params.id);
+    const { id, title, image_url, ingredients, instructions } = req.body;
+    const params_id = Number(req.params.id);
 
-    if (!id || !title || !image_url) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-    if (id !== id_params) {
+    if (id !== params_id) {
       return res
         .status(400)
         .json({ message: "You cannot perform this action" });
     }
 
-    const updatedRecipe = await updateRecipe(id_params, {
+    const updatedRecipe = await updateRecipe(params_id, {
       id: id,
       title: title,
       image_url: image_url,
       updated_at: new Date(),
     });
 
-    res.json(updatedRecipe);
+    const updatedIngredients = await Promise.all(
+      ingredients.map(async (ingredient: NewIngredient) => {
+        return await updateIngredient({
+          ...ingredient,
+          recipe_id: params_id,
+        });
+      })
+    );
+
+    const updatedInstructions = await Promise.all(
+      instructions.map(async (instruction: NewInstruction) => {
+        return await updateInstruction({
+          ...instruction,
+          recipe_id: params_id,
+        });
+      })
+    );
+
+    res.json({
+      updatedRecipe,
+      updatedIngredients,
+      updatedInstructions,
+    });
   } catch (error) {
     next(error);
   }
@@ -122,9 +148,12 @@ export async function deleteRecipeController(
   next: NextFunction
 ) {
   try {
-    const id = Number(req.params.id);
-    const deletedRecipe = await deleteRecipe(id);
-    res.json(deletedRecipe);
+    const recipe_id = Number(req.params.id);
+    const deletedIngredients = await deleteIngredient(recipe_id);
+    const deletedInstruction = await deleteInstruction(recipe_id);
+    const deletedRecipe = await deleteRecipe(recipe_id);
+
+    res.json({ deletedIngredients, deletedInstruction, deletedRecipe });
   } catch (error) {
     next(error);
   }

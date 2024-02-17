@@ -1,9 +1,8 @@
-import { db } from "../config/database/database";
+import { db } from "../config/database/database.config";
 import {
   InstructionUpdate,
   NewInstruction,
-  RecipeUpdate,
-} from "../config/database/database.types.js";
+} from "../config/database/database.types";
 
 export async function createInstruction(instruction: NewInstruction) {
   return await db
@@ -21,21 +20,18 @@ export async function findInstructionByRecipeId(recipe_id: number) {
     .execute();
 }
 
-export async function updateInstruction(
-  id: number,
-  updateWith: InstructionUpdate
-) {
+export async function updateInstruction(updatedInstruction: InstructionUpdate) {
   await db
     .updateTable("instruction")
-    .set(updateWith)
-    .where("id", "=", id)
+    .set(updatedInstruction)
+    .where("recipe_id", "=", Number(updatedInstruction.recipe_id))
     .execute();
 }
 
-export async function deleteInstruction(id: number) {
+export async function deleteInstruction(recipe_id: number) {
   return await db
     .deleteFrom("instruction")
-    .where("id", "=", id)
+    .where("recipe_id", "=", recipe_id)
     .returningAll()
     .executeTakeFirst();
 }
