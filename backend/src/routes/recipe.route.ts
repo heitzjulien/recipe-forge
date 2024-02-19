@@ -9,14 +9,14 @@ import {
 
 const router = express.Router();
 
-router.post("/api/create/recipe", createRecipeController);
+router.post("/api/recipe", createRecipeController);
 
 router.get("/api/recipes", findRecipesController);
 
 router.get("/api/recipe/:id", findRecipeByIdController);
 
-router.put("/api/update/recipe", updateRecipeController);
+router.put("/api/recipe", updateRecipeController);
 
-router.delete("/api/delete/recipe", deleteRecipeController);
+router.delete("/api/recipe", deleteRecipeController);
 
 export default router;
