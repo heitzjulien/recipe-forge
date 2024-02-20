@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks";
+import { h } from "preact";
 import "./CreateRecipeForm.scss";
 
 interface Ingredient {
@@ -22,8 +23,10 @@ export default function CreateRecipeForm() {
   const [title, setTitle] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  const handleInstructionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setInstruction(event.target.value);
+  const handleInstructionChange = (
+    event: h.JSX.TargetedEvent<HTMLTextAreaElement>
+  ) => {
+    setInstruction(event.currentTarget.value);
   };
 
   const handleAddInstruction = () => {
@@ -34,16 +37,20 @@ export default function CreateRecipeForm() {
     setInstruction("");
   };
 
-  const handleIngredientChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setIngredientName(event.target.value);
+  const handleIngredientChange = (
+    event: h.JSX.TargetedEvent<HTMLInputElement>
+  ) => {
+    setIngredientName(event.currentTarget.value);
   };
 
-  const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuantity(event.target.value);
+  const handleQuantityChange = (
+    event: h.JSX.TargetedEvent<HTMLInputElement>
+  ) => {
+    setQuantity(event.currentTarget.value);
   };
 
-  const handleUnitChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setUnit(event.target.value);
+  const handleUnitChange = (event: h.JSX.TargetedEvent<HTMLSelectElement>) => {
+    setUnit(event.currentTarget.value);
   };
 
   const handleAddIngredient = () => {
@@ -53,7 +60,7 @@ export default function CreateRecipeForm() {
     setUnit("");
   };
 
-  const postRecipe = async (event: FormEvent) => {
+  const postRecipe = async (event: Event) => {
     event.preventDefault();
     const data = {
       title: title,
@@ -77,16 +84,16 @@ export default function CreateRecipeForm() {
           <input
             type="text"
             value={title}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setTitle(e.target.value)
+            onChange={(e: h.JSX.TargetedEvent<HTMLInputElement>) =>
+              setTitle(e.currentTarget.value)
             }
           />
           <label htmlFor="image_url">Url de l'image</label>
           <input
             type="text"
             value={imageUrl}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setImageUrl(e.target.value)
+            onChange={(e: h.JSX.TargetedEvent<HTMLInputElement>) =>
+              setImageUrl(e.currentTarget.value)
             }
           />
           <h3>Liste des ingredients</h3>
@@ -113,7 +120,12 @@ export default function CreateRecipeForm() {
             onInput={handleQuantityChange}
           />
           <label htmlFor="unit">Unité</label>
-          <select name="unit" id="unit" value={unit} onInput={handleUnitChange}>
+          <select
+            name="unit"
+            id="unit"
+            value={unit}
+            onChange={handleUnitChange}
+          >
             <option value="kg">Kilogramme</option>
             <option value="g">Gramme</option>
             <option value="mg">Milligramme</option>
