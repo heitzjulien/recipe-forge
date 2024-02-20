@@ -70,7 +70,6 @@ export default function CreateRecipeForm() {
     };
     fetch(import.meta.env.PUBLIC_API_URL + "/recipe", {
       method: "POST",
-      mode: "cors",
       body: JSON.stringify(data),
     });
   };
