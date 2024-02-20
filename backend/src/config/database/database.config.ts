@@ -12,7 +12,7 @@ const dialect = new PostgresDialect({
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
-    max: 10,
+    max: 5,
   }),
 });
 

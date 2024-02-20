@@ -1,0 +1,48 @@
+---
+import type { Ingredient } from "../../interfaces/ingredient.model.astro";
+import ContainerButtons from "../ContainerButtons/ContainerButtons.tsx";
+const { recipe, ingredients, instructions } = Astro.props;
+
+const created_at = new Date(recipe.created_at).toLocaleDateString("FR-fr", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<section class="recipe-details">
+  <h2>{recipe.title}</h2>
+  <img src={recipe.image_url} alt="" />
+  <h3>Les ingrédients</h3>
+  <ul>
+    {
+      ingredients?.map((ingredient: Ingredient) => (
+        <li>
+          {ingredient.name} - {ingredient.quantity} {ingredient.unit}
+        </li>
+      ))
+    }
+  </ul>
+  <h3>Les instructions</h3>
+  <ol>
+    {
+      instructions?.map((instruction: any) => (
+        <li>{instruction.description}</li>
+      ))
+    }
+  </ol>
+  <p>Crée le {created_at}</p>
+
+  <ContainerButtons client:visible id={recipe.id} />
+</section>
+<style lang="scss">
+  section {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .recipe-details img {
+    max-width: 100%;
+  }
+</style>

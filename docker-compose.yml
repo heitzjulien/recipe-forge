@@ -1,15 +1,5 @@
 version: "3"
 services:
-  backend:
-    image: "recipe-forge-backend"
-    build:
-      context: ./backend
-      dockerfile: ./src/docker/Dockerfile.backend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - database
-
   database:
     image: "recipe-forge-database"
     build:
@@ -24,5 +14,31 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
+  backend:
+    image: "recipe-forge-backend"
+    build:
+      context: ./backend
+      dockerfile: ./src/docker/Dockerfile.backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - database
+
+  frontend:
+    image: "recipe-forge-frontend"
+    build:
+      context: ./frontend
+      dockerfile: ./src/docker/Dockerfile.frontend
+    ports:
+      - "4321:4321"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+
 volumes:
   db_data:
+  backend:
+  frontend:

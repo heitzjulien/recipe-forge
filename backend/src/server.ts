@@ -3,6 +3,7 @@ import express, { Application } from "express";
 import { envConfig } from "./config/env/env.config";
 import { errorHandler, notFoundHandler } from "./handlers/httpError.handler";
 import recipeRoute from "./routes/recipe.route";
+import pdfRoute from "./routes/pdf.route";
 import route from "./routes/route";
 
 envConfig();
@@ -18,6 +19,9 @@ app.use(route);
 
 // Routes for recipes
 app.use(recipeRoute);
+
+// Routes for pdf
+app.use(pdfRoute);
 
 // Http error handlers
 app.use(errorHandler);
