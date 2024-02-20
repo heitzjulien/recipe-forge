@@ -1,6 +1,6 @@
 ---
 import type { Ingredient } from "../../interfaces/ingredient.model.astro";
-import ButtonPdf from "../ButtonPdf/ButtonPdf.tsx";
+import ContainerButtons from "../ContainerButtons/ContainerButtons.tsx";
 const { recipe, ingredients, instructions } = Astro.props;
 
 const created_at = new Date(recipe.created_at).toLocaleDateString("FR-fr", {
@@ -34,7 +34,7 @@ const created_at = new Date(recipe.created_at).toLocaleDateString("FR-fr", {
   </ol>
   <p>Crée le {created_at}</p>
 
-  <ButtonPdf client:visible id={recipe.id} />
+  <ContainerButtons client:visible id={recipe.id} />
 </section>
 <style lang="scss">
   section {

@@ -1,22 +1,32 @@
 import { useState } from "preact/hooks";
 import "./CreateRecipeForm.scss";
 
+interface Ingredient {
+  name: string;
+  quantity: string;
+  unit: string;
+}
+
+interface Instruction {
+  step_number: number;
+  description: string;
+}
+
 export default function CreateRecipeForm() {
-  const [ingredients, setIngredients] = useState([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [ingredientName, setIngredientName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("");
   const [instruction, setInstruction] = useState("");
-  const [instructions, setInstructions] = useState([]);
+  const [instructions, setInstructions] = useState<Instruction[]>([]);
   const [title, setTitle] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  const handleInstructionChange = (event) => {
+  const handleInstructionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setInstruction(event.target.value);
   };
 
   const handleAddInstruction = () => {
-    console.log(instruction);
     setInstructions([
       ...instructions,
       { step_number: instructions.length + 1, description: instruction },
@@ -24,15 +34,15 @@ export default function CreateRecipeForm() {
     setInstruction("");
   };
 
-  const handleIngredientChange = (event) => {
+  const handleIngredientChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIngredientName(event.target.value);
   };
 
-  const handleQuantityChange = (event) => {
+  const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
   };
 
-  const handleUnitChange = (event) => {
+  const handleUnitChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setUnit(event.target.value);
   };
 
@@ -43,13 +53,7 @@ export default function CreateRecipeForm() {
     setUnit("");
   };
 
-  // const handleRemoveIngredient = (index) => {
-  //   const values = [...ingredients];
-  //   values.splice(index, 1);
-  //   setIngredients(values);
-  // };
-
-  const postRecipe = async (event: Event) => {
+  const postRecipe = async (event: FormEvent) => {
     event.preventDefault();
     const data = {
       title: title,
@@ -60,6 +64,7 @@ export default function CreateRecipeForm() {
     fetch(import.meta.env.PUBLIC_API_URL + "/recipe", {
       method: "POST",
       mode: "cors",
+      body: JSON.stringify(data),
     });
   };
 
@@ -72,13 +77,17 @@ export default function CreateRecipeForm() {
           <input
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target?.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setTitle(e.target.value)
+            }
           />
           <label htmlFor="image_url">Url de l'image</label>
           <input
             type="text"
             value={imageUrl}
-            onChange={(e) => setImageUrl(e.target?.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setImageUrl(e.target.value)
+            }
           />
           <h3>Liste des ingredients</h3>
           <ul>
@@ -122,7 +131,7 @@ export default function CreateRecipeForm() {
           <h3>Les étapes de préparation</h3>
 
           {instructions?.map((instruction, index) => (
-            <div>
+            <div key={index}>
               {instruction.step_number}: {instruction.description}
             </div>
           ))}

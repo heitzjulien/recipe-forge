@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import "./ButtonRecipeDetail.scss";
+import "./ContainerButtons.scss";
 
 export type Props = {
   id: number;
