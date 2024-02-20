@@ -11,3 +11,7 @@ install:
 	cd frontend && yarn install &
 	@echo "Install backend dependence"
 	cd backend && yarn install
+
+up: 
+	@echo "Starting Recipe Forge..."
+	docker-compose --project-name recipe_forge up

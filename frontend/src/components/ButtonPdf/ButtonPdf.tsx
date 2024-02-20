@@ -10,7 +10,7 @@ export default function ButtonPdf({ id }: Props) {
 
   const handleButtonClick = () => {
     setIsLoading(true);
-    fetch(import.meta.env.PUBLIC_API_URL + "/" + id)
+    fetch(import.meta.env.PUBLIC_API_URL + "/recipe/" + id)
       .then((response) => response.blob())
       .then((blob) => {
         const url = window.URL.createObjectURL(blob);
@@ -27,7 +27,7 @@ export default function ButtonPdf({ id }: Props) {
   };
 
   const handleDeleteButtonClick = () => {
-    fetch(import.meta.env.PUBLIC_API_URL + "/" + id, {
+    fetch(import.meta.env.PUBLIC_API_URL + "/recipe/" + id, {
       method: "DELETE",
     })
       .then((response) => {
