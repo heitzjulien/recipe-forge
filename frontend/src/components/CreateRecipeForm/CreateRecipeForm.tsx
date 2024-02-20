@@ -68,11 +68,20 @@ export default function CreateRecipeForm() {
       ingredients: ingredients,
       instructions: instructions,
     };
-    fetch(import.meta.env.PUBLIC_API_URL + "/recipe", {
+    fetch("https://recipe-forge.vercel.app/api/recipe", {
       method: "POST",
-      mode: "cors",
       body: JSON.stringify(data),
-    });
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        console.error(
+          "Vous venez de rencontrer une erreur lors de la création de la recette :",
+          error
+        );
+      });
   };
 
   return (
