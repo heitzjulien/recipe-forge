@@ -17,6 +17,6 @@ router.get("/api/recipe/:id", findRecipeByIdController);
 
 router.put("/api/recipe", updateRecipeController);
 
-router.delete("/api/recipe", deleteRecipeController);
+router.delete("/api/recipe/:id", deleteRecipeController);
 
 export default router;
