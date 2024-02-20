@@ -1,0 +1,18 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import RecipeDetails from "../../components/RecipeDetails/RecipeDetails.astro";
+import { fetchData, fetchDataRows } from "../../services/api.service";
+
+const response = await fetchData(
+  import.meta.env.PUBLIC_API_URL + "/id",
+  Astro.params.id
+);
+---
+
+<Layout title={response.title}>
+  <RecipeDetails
+    recipe={response}
+    instructions={response.instructions}
+    ingredients={response.ingredients}
+  />
+</Layout>
