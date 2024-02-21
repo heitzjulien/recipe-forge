@@ -2,7 +2,7 @@
 
 Dans le cadre d'un projet scolaire, j'ai construit Recipe Forge, une application web qui vous permet de créer, partager et découvrir des recettes de cuisine.
 
-## Technologis utilisées
+## Technologies utilisées
 
 - Express
 - Node.js
